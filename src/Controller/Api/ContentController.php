@@ -2,7 +2,8 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
+use App\Entity\Content;
+use App\Service\ContentService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +14,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/content')]
 final class ContentController extends AbstractController
 {
-    public function __construct(private UserService $userService)
+    public function __construct(
+        private UserService $userService,
+        private ContentService $contentService
+        )
     {
     }
 
@@ -23,16 +27,21 @@ final class ContentController extends AbstractController
     )]
     public function index(): JsonResponse
     {
-        return $this->json([]);
+        $contents = $this->contentService->paginate();
+        return $this->json($contents);
     }
 
     #[Route(
         name: 'app_content_store', 
         methods:[Request::METHOD_POST]
     )]
-    public function store(): JsonResponse
+    public function store(
+        #[MapRequestPayload] Content $content
+    ): JsonResponse
     {
-        return $this->json([]);
+        $content = $this->contentService->create($content);
+
+        return $this->json($content);
     }
 
     #[Route(
