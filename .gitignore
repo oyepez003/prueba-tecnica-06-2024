@@ -24,3 +24,6 @@
 .history
 .DS_Store
 *.swp
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

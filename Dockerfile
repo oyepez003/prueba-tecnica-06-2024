@@ -21,17 +21,20 @@ RUN install-php-extensions @composer pdo_sqlite apcu intl opcache zip
 RUN curl -sS https://get.symfony.com/cli/installer | bash && \
 	mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
-RUN mkdir /db
-RUN /usr/bin/sqlite3 /db/test.db
-
 WORKDIR /app
 #VOLUME /app/var/
 
 COPY . .
 
-#RUN set -eux; \
-#	mkdir -p var/cache var/log; \
-#	composer dump-autoload --classmap-authoritative --no-dev; \
-#	composer dump-env prod; \
-#	composer run-script --no-dev post-install-cmd; \
-#	chmod +x bin/console; sync;
+RUN set -eux
+RUN mkdir -p var/cache var/log
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN yes | composer install --no-scripts --ignore-platform-reqs --prefer-dist --optimize-autoloader
+RUN composer dump-autoload --classmap-authoritative
+RUN chmod +x bin/console; sync;
+RUN bin/console lexik:jwt:generate-keypair --skip-if-exists
+
+RUN mkdir /db
+RUN /usr/bin/sqlite3 /db/app_data.db ".databases"
+RUN chown www-data:www-data -R /db/
+RUN php bin/console doctrine:migrations:migrate
