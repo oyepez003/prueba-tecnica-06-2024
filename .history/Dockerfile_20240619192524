@@ -1,0 +1,36 @@
+FROM php:8.3-fpm AS build
+
+RUN apt-get update
+RUN apt-get install -y libmagickwand-dev --no-install-recommends
+RUN apt-get install -y vim git curl libxml2-dev g++ make autoconf icu-devtools libzip-dev ghostscript libgs-dev librabbitmq-dev libssh-dev
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    vim \
+    git \
+	acl \
+	file \
+	gettext \
+	git \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+	install-php-extensions \
+		@composer \
+        pdo_mysql \
+		apcu \
+		intl \
+		opcache \
+		zip \
+	;
+
+WORKDIR /app
+#VOLUME /app/var/
+
+COPY . .
+
+#RUN set -eux; \
+#	mkdir -p var/cache var/log; \
+#	composer dump-autoload --classmap-authoritative --no-dev; \
+#	composer dump-env prod; \
+#	composer run-script --no-dev post-install-cmd; \
+#	chmod +x bin/console; sync;
