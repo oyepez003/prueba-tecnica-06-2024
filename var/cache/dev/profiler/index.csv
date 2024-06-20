@@ -14,3 +14,5 @@ f28fa1,192.168.208.1,GET,http://localhost:8000/api/register,1718851989,315ee2,40
 24b73a,192.168.208.1,GET,http://localhost:8000/api/register,1718851998,,200,request
 c1d375,192.168.208.1,GET,http://localhost:8000/api/register,1718852013,a72f61,405,request
 a72f61,192.168.208.1,GET,http://localhost:8000/api/register,1718852013,,405,request
+671f27,192.168.208.1,GET,http://localhost:8000/api/register,1718852709,4fbdd5,405,request
+4fbdd5,192.168.208.1,GET,http://localhost:8000/api/register,1718852709,,405,request
