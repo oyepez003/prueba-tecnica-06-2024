@@ -1,0 +1,26 @@
+# Public and Data
+/data/
+/public/js/
+/public/js~/
+!/public/uploads/profile/test/.gitkeep
+!/public/uploads/documents/.gitkeep
+!/public/uploads/images/.gitkeep
+!/public/uploads/video/.gitkeep
+/public/uploads/*
+
+# symfony/framework-bundle
+/public/bundles/
+/var/
+/vendor/
+
+# phpunit/phpunit
+/phpunit.xml
+.phpunit.result.cache
+
+# Local Generic
+.idea
+.vscode
+.vscode/launch.json
+.history
+.DS_Store
+*.swp
