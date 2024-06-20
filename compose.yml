@@ -11,6 +11,7 @@ services:
       - 8000:8000
     networks:
       - app-network
+    entrypoint: "symfony serve" # Comment the entrypoint to enable the server auto start
 
 networks:
   app-network:

@@ -6,7 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation;
+use Symfony\Component\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -16,27 +16,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Annotation\Groups('read')]
+    #[Serializer\Groups('read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Constraints\NotBlank()]
-    #[Annotation\Groups('read')]
+    #[Constraints\NotBlank(groups : ['register'])]
+    #[Serializer\Groups('read')]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Annotation\Groups('read')]
+    #[Serializer\Groups('read')]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Constraints\NotBlank()]
+    #[Constraints\NotBlank(groups : ['register'])]
     private ?string $password = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(nullable: true)]
+    #[Constraints\NotBlank(groups : ['update'])]
+    #[Serializer\Groups('read')]
+    private ?string $name = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(nullable: true)]
+    #[Constraints\NotBlank(groups : ['update'])]
+    #[Serializer\Groups('read')]
+    private ?string $lastName = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(nullable: true)]
+    #[Constraints\NotBlank(groups : ['update'])]
+    #[Serializer\Groups('read')]
+    private ?string $email = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(nullable: true)]
+    #[Constraints\NotBlank(groups : ['update'])]
+    #[Serializer\Groups('read')]
+    private ?int $age = null;
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column(nullable: true)]
+    #[Serializer\Groups('read')]
+    private ?string $phone = null;
 
     public function getId(): ?int
     {
@@ -111,5 +150,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getAge(): ?int
+    {
+        return $this->age;
+    }
+
+    public function setAge(?int $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
     }
 }

@@ -11,23 +11,30 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-#[Route('/api')]
-final class AuthController extends AbstractController
+#[Route('/api/user')]
+final class UserController extends AbstractController
 {
     public function __construct(private UserService $userService)
     {
     }
 
     #[Route(
-        path: '/register', 
-        name: 'app_security_register', 
-        methods:[Request::METHOD_POST]
+        name: 'app_user_index', 
+        methods:[Request::METHOD_GET]
     )]
-    public function register(
-        #[MapRequestPayload(validationGroups: 'register')] User $user): JsonResponse
+    public function index(): JsonResponse
     {
-        $user = $this->userService->createUser($user, $user->getPassword());
+        return $this->json([]);
+    }
 
+    #[Route(
+        name: 'app_user_update', 
+        methods:[Request::METHOD_PUT]
+    )]
+    public function update(
+        #[MapRequestPayload(validationGroups: 'update')] User $user
+    ): JsonResponse
+    {
         return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
     }
 }
