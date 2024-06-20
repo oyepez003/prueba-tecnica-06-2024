@@ -24,7 +24,8 @@ final class UserController extends AbstractController
     )]
     public function index(): JsonResponse
     {
-        return $this->json([]);
+        $user = $this->getUser();
+        return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
     }
 
     #[Route(
@@ -35,6 +36,10 @@ final class UserController extends AbstractController
         #[MapRequestPayload(validationGroups: 'update')] User $user
     ): JsonResponse
     {
+        $user = $this->userService->updateUser(
+            $this->getUser(), 
+            $user
+        );
         return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
     }
 }

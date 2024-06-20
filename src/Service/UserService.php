@@ -25,4 +25,28 @@ class UserService
         $this->userRepository->upgradePassword($user, $hashedPassword);
         return $user;
     }
+
+    public function updateUser(User $user, User $newDataUser): User
+    {
+        $hashedPassword = null;
+
+        if($newDataUser->getPassword()) {
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                $newDataUser->getPassword()
+            );
+        }
+
+        $user->syncFieldsUsing($newDataUser);
+
+        if($hashedPassword) {
+            $this->userRepository->upgradePassword($user, $hashedPassword);
+
+            return $user;
+        }
+        
+        $this->userRepository->persist($user);
+
+        return $user;
+    }
 }

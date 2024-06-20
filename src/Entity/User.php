@@ -211,4 +211,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function syncFieldsUsing(User $user) {
+        $this->setName($user->getName());
+        $this->setLastName($user->getLastName());
+        $this->setAge($user->getAge());
+        $this->setPhone($user->getPhone());
+        $this->setEmail($user->getEmail());
+    }
 }
