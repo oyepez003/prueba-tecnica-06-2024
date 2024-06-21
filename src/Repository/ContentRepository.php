@@ -4,35 +4,56 @@ namespace App\Repository;
 
 use App\Entity\Content;
 use App\Repository\Concerns\HasRepositoryMethods;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * @extends ServiceEntityRepository<Content>
+ * @extends BaseRepository<Content>
  */
-class ContentRepository extends ServiceEntityRepository
+class ContentRepository extends BaseRepository 
 {
-    use HasRepositoryMethods;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(
+        ManagerRegistry $registry,
+        private PaginatorInterface $paginator
+        )
     {
         parent::__construct($registry, Content::class);
     }
 
-    public function paginate(): Paginator
+    public function paginate(int $page = 1, int $limit = 10, $options = [], $filters = []): PaginationInterface
     {
-        $query = $this->getEntityManager()
-                    ->createQueryBuilder('c')
-                    ->setFirstResult(0)
-                    ->setMaxResults(100)
-                    ->getQuery();
+        $dql = "SELECT c FROM App\Entity\Content c";
+        $parameters = [];
 
-        $paginator = new Paginator($query, fetchJoinCollection: true);
-        $c = count($paginator);
-        foreach ($paginator as $post) {
-            echo $post->getHeadline() . "\n";
+        if(isset($filters['title']) || isset($filters['description'])) {
+            $dql .= ' WHERE ';
+            if(isset($filters['title']) && $filters['title']) {
+                $dql .= " c.title LIKE :title ";
+                $parameters['title'] = '%' . $filters['title'] . '%';
+                if(isset($filters['description'])) {
+                    $dql .= " OR ";
+                }
+            }
+            if(isset($filters['description']) && $filters['description']) {
+                $dql .= " c.description LIKE :description ";
+                $parameters['description'] = '%' . $filters['description'] . '%';
+            }
         }
+
+        $query =  $this->getEntityManager()->createQuery($dql);
+
+        if($parameters) {
+            $query->setParameters($parameters);
+        }
+
+        $paginator = $this->paginator->paginate(
+            $query,
+            $page, 
+            $limit,
+            $options
+        );
+
         return $paginator;
     }
 

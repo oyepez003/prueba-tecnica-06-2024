@@ -3,13 +3,16 @@
 namespace App\Controller\Api;
 
 use App\Entity\Content;
+use App\Helper\Paginator;
 use App\Service\ContentService;
 use App\Service\UserService;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/content')]
 final class ContentController extends AbstractController
@@ -25,9 +28,15 @@ final class ContentController extends AbstractController
         name: 'app_content_index', 
         methods:[Request::METHOD_GET]
     )]
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $contents = $this->contentService->paginate();
+        list($page, $limit) = Paginator::getRequestParameters($request);
+
+        $filters['title'] = $request->get('title');
+        $filters['description'] = $request->get('description');
+
+        $contents = $this->contentService->paginate(page: $page, limit: $limit, filters: $filters);
+
         return $this->json($contents);
     }
 
@@ -50,9 +59,10 @@ final class ContentController extends AbstractController
         methods:[Request::METHOD_GET],
         requirements: ['content' => '\d+']
     )]
-    public function show(int $content): JsonResponse
+    public function show(Content $content): JsonResponse
     {
-        return $this->json([]);
+
+        return $this->json($content);
     }
 
     #[Route(
@@ -60,9 +70,13 @@ final class ContentController extends AbstractController
         name: 'app_content_update', 
         methods:[Request::METHOD_PUT]
     )]
-    public function update(int $content): JsonResponse
+    public function update(
+        Content $content,
+        #[MapRequestPayload] Content $contentDto): JsonResponse
     {
-        return $this->json([]);
+        $content = $this->contentService->update($content, $contentDto);
+
+        return $this->json($content);
     }
 
     #[Route(
@@ -70,8 +84,10 @@ final class ContentController extends AbstractController
         name: 'app_content_destroy', 
         methods:[Request::METHOD_DELETE]
     )]
-    public function destroy(int $content): JsonResponse
+    public function destroy(Content $content): JsonResponse
     {
+        $this->contentService->destroy($content);
+
         return $this->json([]);
     }
 }

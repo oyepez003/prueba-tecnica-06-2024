@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserService
+class UserService extends BaseService
 {
     public function __construct(
         private UserRepository $userRepository,
@@ -15,7 +15,11 @@ class UserService
     {
     }
 
-    public function createUser(User $user, string $password): User
+    protected function getMainRepository() {
+        return $this->userRepository;
+    }
+
+    public function create(User $user, string $password): User
     {
         $hashedPassword = $this->passwordHasher->hashPassword(
             $user,
@@ -26,18 +30,18 @@ class UserService
         return $user;
     }
 
-    public function updateUser(User $user, User $newDataUser): User
+    public function update(User $user, User $userDto): User
     {
         $hashedPassword = null;
 
-        if($newDataUser->getPassword()) {
+        if($userDto->getPassword()) {
             $hashedPassword = $this->passwordHasher->hashPassword(
                 $user,
-                $newDataUser->getPassword()
+                $userDto->getPassword()
             );
         }
 
-        $user->syncFieldsUsing($newDataUser);
+        $user->syncFieldsUsing($userDto);
 
         if($hashedPassword) {
             $this->userRepository->upgradePassword($user, $hashedPassword);

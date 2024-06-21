@@ -3,16 +3,20 @@
 namespace App\Service;
 
 use App\Entity\Content;
+use App\Helper\Paginator;
 use App\Repository\ContentRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Uid\Uuid;
 
-class ContentService
+class ContentService extends BaseService
 {
     public function __construct(
         private ContentRepository $contentRepository,
     )
     {
+    }
+
+    protected function getMainRepository() {
+        return $this->contentRepository;
     }
 
     public function create(Content $content): Content
@@ -23,8 +27,18 @@ class ContentService
         return $content;
     }
 
-    public function paginate(): Paginator
+    public function update(Content $content, Content $contentDto): Content
     {
-        return $this->contentRepository->paginate();
+        $content->syncFieldsUsing($contentDto);
+        $this->contentRepository->persist($content);
+
+        return $content;
+    }
+
+    public function paginate(int $page = 1, int $limit = 10, $options = [], $filters = []): array
+    {
+        $pagination = $this->contentRepository->paginate($page, $limit, $options, $filters);
+
+        return Paginator::toArray($pagination);
     }
 }

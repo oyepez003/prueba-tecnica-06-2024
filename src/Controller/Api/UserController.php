@@ -33,12 +33,12 @@ final class UserController extends AbstractController
         methods:[Request::METHOD_PUT]
     )]
     public function update(
-        #[MapRequestPayload(validationGroups: 'update')] User $user
+        #[MapRequestPayload(validationGroups: 'update')] User $userDto
     ): JsonResponse
     {
-        $user = $this->userService->updateUser(
+        $user = $this->userService->update(
             $this->getUser(), 
-            $user
+            $userDto
         );
         return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
     }

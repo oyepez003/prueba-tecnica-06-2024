@@ -24,9 +24,9 @@ final class AuthController extends AbstractController
         methods:[Request::METHOD_POST]
     )]
     public function register(
-        #[MapRequestPayload(validationGroups: 'register')] User $user): JsonResponse
+        #[MapRequestPayload(validationGroups: 'register')] User $userDto): JsonResponse
     {
-        $user = $this->userService->createUser($user, $user->getPassword());
+        $user = $this->userService->create($userDto, $userDto->getPassword());
 
         return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
     }

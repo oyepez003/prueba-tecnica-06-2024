@@ -25,13 +25,16 @@ class ApiNormalizer implements NormalizerInterface
         }
 
         $error = [
-            'message' => $exception->getMessage(),
+            'message' => Response::$statusTexts[$exception->getStatusCode()] ?? $exception->getMessage(),
             'code' => $exception->getStatusCode(),
         ];
 
         if($errors) {
-            $error['message'] = Response::$statusTexts[$exception->getStatusCode()] ?? $exception->getMessage();
             $error['violations'] = $errors;
+        }
+
+        if($context['debug'] && $exception->getStatusCode() >= Response::HTTP_INTERNAL_SERVER_ERROR) {
+            $error['detail'] = $exception->getTraceAsString();
         }
 
         return compact('error');

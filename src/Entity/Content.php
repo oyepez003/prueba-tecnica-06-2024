@@ -148,4 +148,13 @@ class Content
 
         return $this;
     }
+
+    public function syncFieldsUsing(Content $content) {
+        $this->setTitle($content->getTitle());
+        $this->setImage($content->getImage());
+        $this->setLocale($content->getLocale());
+        $this->setPrice($content->getPrice());
+        $this->setSaving($content->getSaving());
+        $this->setCurrency($content->getCurrency());
+    }
 }
