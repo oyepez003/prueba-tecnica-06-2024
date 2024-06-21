@@ -1,0 +1,509 @@
+{
+	"info": {
+		"_postman_id": "dbb2d70e-1738-4087-a30a-f0f5a2fe1208",
+		"name": "Prueba Tecnica WidiTrade",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Endpoints de autenticación:",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\":\"oyepez003@gmail.com\",\"password\":\"8As7A[91G]4+\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/login",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"oyepez003@gmail.com\",\n    \"password\": \"8As7A[91G]4+\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/register",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Endpoints de usuario:",
+			"item": [
+				{
+					"name": "User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/user",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"8As7A[91G]4+\",\n    \"name\": \"Omar 222\",\n    \"lastName\": \"Yepez\",\n    \"email\": \"oyepez003@gmail.com\",\n    \"age\": 20,\n    \"phone\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/user",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTg5MDU2MDUsImV4cCI6MTcxODkwOTIwNSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoib3llcGV6MDAzQGdtYWlsLmNvbSJ9.XoWKitXfDGVqgiuUjXG-ABsMd_0lf4_a6Ju6RdshvLeF867OIdVZzQhNw3iU4KulsHfa5HFwhKgYhKDqil-zEE5cTCPkhHU54-kzAwiNh4dul0ItfCxm3xj5RLtS-o-_Ci1ziscFEbPvD4_lgRbevjNBXqQNfvOE45S2eUHNJ-2st05aKPwrvsAQoURDRcXZzR0Pij0aE0p23JZuLfUSqnfcDb_IZmzX3yb0Wv9Z7iimD1FWIE74LIbr4fOgPFlqAxrZ5G6cseOoBuZg2oaS_lI8xD3HUAV0pmu52VBRN0T4Ayl7F0Gvu8Lz1jMHBgHf7NtL4ffSAIGiC5_TLPJaCA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Endpoints de contenido:",
+			"item": [
+				{
+					"name": "Contents",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "foo",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "bar",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/6",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Titulo\",\n    \"description\": \"Description\",\n    \"image\": \"https://www.test.com/test.jpg\",\n    \"locale\": \"ES\",\n    \"price\": 20,\n    \"saving\": 20,\n    \"currency\": \"COP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Titulo Prueba Omar\",\n    \"description\": \"Description\",\n    \"image\": \"https://www.test.com/test.jpg\",\n    \"locale\": \"ES\",\n    \"price\": 20,\n    \"saving\": 20,\n    \"currency\": \"COP\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/6",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/6",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTg5MDU2MDUsImV4cCI6MTcxODkwOTIwNSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoib3llcGV6MDAzQGdtYWlsLmNvbSJ9.XoWKitXfDGVqgiuUjXG-ABsMd_0lf4_a6Ju6RdshvLeF867OIdVZzQhNw3iU4KulsHfa5HFwhKgYhKDqil-zEE5cTCPkhHU54-kzAwiNh4dul0ItfCxm3xj5RLtS-o-_Ci1ziscFEbPvD4_lgRbevjNBXqQNfvOE45S2eUHNJ-2st05aKPwrvsAQoURDRcXZzR0Pij0aE0p23JZuLfUSqnfcDb_IZmzX3yb0Wv9Z7iimD1FWIE74LIbr4fOgPFlqAxrZ5G6cseOoBuZg2oaS_lI8xD3HUAV0pmu52VBRN0T4Ayl7F0Gvu8Lz1jMHBgHf7NtL4ffSAIGiC5_TLPJaCA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Endpoints del marketplace:",
+			"item": [
+				{
+					"name": "Content Rate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rate\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/8/rate",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"8",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content Favorite",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/9/favorite",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"9",
+								"favorite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Content User Favorites",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{WIDITRADE_API_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{WIDITRADE_API_BASE_URL}}/api/content/favorites",
+							"host": [
+								"{{WIDITRADE_API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"content",
+								"favorites"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MTg5MDU2MDUsImV4cCI6MTcxODkwOTIwNSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoib3llcGV6MDAzQGdtYWlsLmNvbSJ9.XoWKitXfDGVqgiuUjXG-ABsMd_0lf4_a6Ju6RdshvLeF867OIdVZzQhNw3iU4KulsHfa5HFwhKgYhKDqil-zEE5cTCPkhHU54-kzAwiNh4dul0ItfCxm3xj5RLtS-o-_Ci1ziscFEbPvD4_lgRbevjNBXqQNfvOE45S2eUHNJ-2st05aKPwrvsAQoURDRcXZzR0Pij0aE0p23JZuLfUSqnfcDb_IZmzX3yb0Wv9Z7iimD1FWIE74LIbr4fOgPFlqAxrZ5G6cseOoBuZg2oaS_lI8xD3HUAV0pmu52VBRN0T4Ayl7F0Gvu8Lz1jMHBgHf7NtL4ffSAIGiC5_TLPJaCA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

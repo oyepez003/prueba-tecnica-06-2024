@@ -35,10 +35,10 @@ down: ## Stop the docker hub
 logs: ## Show live logs
 	@$(DOCKER_COMP) logs --tail=0 --follow
 
-sh: ## Connect to the FrankenPHP container
+sh: ## Connect to the PHP container
 	@$(PHP_CONT) sh
 
-bash: ## Connect to the FrankenPHP container via bash so up and down arrows go to previous commands
+bash: ## Connect to the PHP container via bash so up and down arrows go to previous commands
 	@$(PHP_CONT) bash
 
 test: ## Start tests with phpunit, pass the parameter "c=" to add options to phpunit, example: make test c="--group e2e --stop-on-failure"
