@@ -51,17 +51,35 @@ class ContentService extends BaseService
     }
 
     public function rate(User $user, Content $content, ContentRate $contentRateDto): ContentRate {
-        $contentRateDto->setCreatedBy($user);
-        $contentRateDto->setContent($content);
-        $contentRateDto->setCreatedAt(new DateTimeImmutable());
+        $contentRate = $this->contentRateRepository->findOneBy([
+            'created_by' => $user,
+            'content' => $content
+        ]);
 
-        $this->contentRateRepository->persist($contentRateDto);
+        if(!$contentRate) {
+            $contentRate = $contentRateDto;
+        }
+        
+        $contentRate->setCreatedBy($user);
+        $contentRate->setContent($content);
+        $contentRate->setCreatedAt(new DateTimeImmutable());
+        $contentRate->setRate($contentRateDto->getRate());
 
-        return $contentRateDto;
+        $this->contentRateRepository->persist($contentRate);
+
+        return $contentRate;
     }
 
     public function markAsFavorite(User $user, Content $content): ContentFavorite {
-        $contentFavorite = new ContentFavorite();
+        $contentFavorite = $this->contentFavoriteRepository->findOneBy([
+            'created_by' => $user,
+            'content' => $content
+        ]);
+
+        if(!$contentFavorite) {
+            $contentFavorite = new ContentFavorite();
+        }
+
         $contentFavorite->setCreatedBy($user);
         $contentFavorite->setContent($content);
         $contentFavorite->setCreatedAt(new DateTimeImmutable());
