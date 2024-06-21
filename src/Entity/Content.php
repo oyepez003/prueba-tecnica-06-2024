@@ -66,9 +66,16 @@ class Content
     #[ORM\OneToMany(targetEntity: ContentRate::class, mappedBy: 'content')]
     private Collection $contentRates;
 
+    /**
+     * @var Collection<int, ContentFavorite>
+     */
+    #[ORM\OneToMany(targetEntity: ContentFavorite::class, mappedBy: 'content')]
+    private Collection $contentFavorites;
+
     public function __construct()
     {
         $this->contentRates = new ArrayCollection();
+        $this->contentFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -205,6 +212,36 @@ class Content
             // set the owning side to null (unless already changed)
             if ($contentRate->getContent() === $this) {
                 $contentRate->setContent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContentFavorite>
+     */
+    public function getContentFavorites(): Collection
+    {
+        return $this->contentFavorites;
+    }
+
+    public function addContentFavorite(ContentFavorite $contentFavorite): static
+    {
+        if (!$this->contentFavorites->contains($contentFavorite)) {
+            $this->contentFavorites->add($contentFavorite);
+            $contentFavorite->setContent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContentFavorite(ContentFavorite $contentFavorite): static
+    {
+        if ($this->contentFavorites->removeElement($contentFavorite)) {
+            // set the owning side to null (unless already changed)
+            if ($contentFavorite->getContent() === $this) {
+                $contentFavorite->setContent(null);
             }
         }
 

@@ -13,7 +13,7 @@ class Paginator
     public static function toArray(PaginationInterface $pagination): array
     {
         $lastPage = $pagination->getTotalItemCount() / $pagination->getItemNumberPerPage();
-        $lastPage = $lastPage >= 1 ? $lastPage : 0;
+        $lastPage = $lastPage >= 1 ? $lastPage : $pagination->getCurrentPageNumber();
         return [
             "total" => $pagination->getTotalItemCount(),
             "per_page" => $pagination->getItemNumberPerPage(),

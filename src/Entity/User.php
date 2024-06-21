@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation as Serializer;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+#[UniqueEntity('username', groups: ['register'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -38,6 +40,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     #[Constraints\NotBlank(groups : ['register'])]
+    #[Constraints\PasswordStrength(
+        minScore : Constraints\PasswordStrength::STRENGTH_WEAK,
+        groups : ['register', 'update']
+    )]
     private ?string $password = null;
 
     /**
@@ -85,9 +91,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ContentRate::class, mappedBy: 'created_by')]
     private Collection $contentRates;
 
+    /**
+     * @var Collection<int, ContentFavorite>
+     */
+    #[ORM\OneToMany(targetEntity: ContentFavorite::class, mappedBy: 'created_by')]
+    private Collection $contentFavorites;
+
     public function __construct()
     {
         $this->contentRates = new ArrayCollection();
+        $this->contentFavorites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,6 +270,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($contentRate->getCreatedBy() === $this) {
                 $contentRate->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContentFavorite>
+     */
+    public function getContentFavorites(): Collection
+    {
+        return $this->contentFavorites;
+    }
+
+    public function addContentFavorite(ContentFavorite $contentFavorite): static
+    {
+        if (!$this->contentFavorites->contains($contentFavorite)) {
+            $this->contentFavorites->add($contentFavorite);
+            $contentFavorite->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContentFavorite(ContentFavorite $contentFavorite): static
+    {
+        if ($this->contentFavorites->removeElement($contentFavorite)) {
+            // set the owning side to null (unless already changed)
+            if ($contentFavorite->getCreatedBy() === $this) {
+                $contentFavorite->setCreatedBy(null);
             }
         }
 

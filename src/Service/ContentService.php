@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Entity\Content;
+use App\Entity\ContentFavorite;
 use App\Entity\ContentRate;
 use App\Entity\User;
 use App\Helper\Paginator;
+use App\Repository\ContentFavoriteRepository;
 use App\Repository\ContentRateRepository;
 use App\Repository\ContentRepository;
 use DateTimeImmutable;
@@ -16,6 +18,7 @@ class ContentService extends BaseService
     public function __construct(
         private ContentRepository $contentRepository,
         private ContentRateRepository $contentRateRepository,
+        private ContentFavoriteRepository $contentFavoriteRepository
     )
     {
     }
@@ -55,5 +58,22 @@ class ContentService extends BaseService
         $this->contentRateRepository->persist($contentRateDto);
 
         return $contentRateDto;
+    }
+
+    public function markAsFavorite(User $user, Content $content): ContentFavorite {
+        $contentFavorite = new ContentFavorite();
+        $contentFavorite->setCreatedBy($user);
+        $contentFavorite->setContent($content);
+        $contentFavorite->setCreatedAt(new DateTimeImmutable());
+        $this->contentFavoriteRepository->persist($contentFavorite);
+
+        return $contentFavorite;
+    }
+
+    public function paginateFavorites(User $user, int $page = 1, int $limit = 10, $options = [], $filters = []): array
+    {
+        $pagination = $this->contentFavoriteRepository->paginate($user, $page, $limit, $options, $filters);
+
+        return Paginator::toArray($pagination);
     }
 }

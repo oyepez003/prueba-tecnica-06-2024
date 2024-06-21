@@ -37,9 +37,13 @@ final class MarketplaceController extends BaseController
         name: 'app_marketplace_favorite', 
         methods:[Request::METHOD_POST]
     )]
-    public function favorite(): JsonResponse
+    public function favorite(
+        Content $content
+    ): JsonResponse
     {
-        return $this->json([]);
+        $contentFavorite = $this->contentService->markAsFavorite($this->getUser(), $content);
+
+        return $this->json($contentFavorite);
     }
 
     #[Route(
@@ -49,6 +53,8 @@ final class MarketplaceController extends BaseController
     )]
     public function favorites(): JsonResponse
     {
-        return $this->json(['favorites']);
+        $contentFavorites = $this->contentService->paginateFavorites($this->getUser());
+
+        return $this->json($contentFavorites);
     }
 }
