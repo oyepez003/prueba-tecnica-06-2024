@@ -5,22 +5,15 @@ namespace App\Controller\Api;
 use App\Entity\Content;
 use App\Helper\Paginator;
 use App\Service\ContentService;
-use App\Service\UserService;
-use stdClass;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/content')]
-final class ContentController extends AbstractController
+final class ContentController extends BaseController
 {
-    public function __construct(
-        private UserService $userService,
-        private ContentService $contentService
-        )
+    public function __construct(private ContentService $contentService)
     {
     }
 

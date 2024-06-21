@@ -4,15 +4,13 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Service\UserService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/user')]
-final class UserController extends AbstractController
+final class UserController extends BaseController
 {
     public function __construct(private UserService $userService)
     {
@@ -25,7 +23,7 @@ final class UserController extends AbstractController
     public function index(): JsonResponse
     {
         $user = $this->getUser();
-        return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
+        return $this->json($user);
     }
 
     #[Route(
@@ -40,6 +38,6 @@ final class UserController extends AbstractController
             $this->getUser(), 
             $userDto
         );
-        return $this->json(data: $user, context: [AbstractNormalizer::GROUPS => ['read']]);
+        return $this->json($user);
     }
 }

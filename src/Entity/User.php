@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,19 +18,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     #[Constraints\NotBlank(groups : ['register'])]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?string $username = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private array $roles = [];
 
     /**
@@ -43,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(nullable: true)]
     #[Constraints\NotBlank(groups : ['update'])]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?string $name = null;
 
     /**
@@ -51,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(nullable: true)]
     #[Constraints\NotBlank(groups : ['update'])]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?string $lastName = null;
 
     /**
@@ -59,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(nullable: true)]
     #[Constraints\NotBlank(groups : ['update'])]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?string $email = null;
 
     /**
@@ -67,15 +69,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(nullable: true)]
     #[Constraints\NotBlank(groups : ['update'])]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?int $age = null;
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column(nullable: true)]
-    #[Serializer\Groups('read')]
+    #[Serializer\Groups('dto')]
     private ?string $phone = null;
+
+    /**
+     * @var Collection<int, ContentRate>
+     */
+    #[ORM\OneToMany(targetEntity: ContentRate::class, mappedBy: 'created_by')]
+    private Collection $contentRates;
+
+    public function __construct()
+    {
+        $this->contentRates = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -218,5 +231,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->setAge($user->getAge());
         $this->setPhone($user->getPhone());
         $this->setEmail($user->getEmail());
+    }
+
+    /**
+     * @return Collection<int, ContentRate>
+     */
+    public function getContentRates(): Collection
+    {
+        return $this->contentRates;
+    }
+
+    public function addContentRate(ContentRate $contentRate): static
+    {
+        if (!$this->contentRates->contains($contentRate)) {
+            $this->contentRates->add($contentRate);
+            $contentRate->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContentRate(ContentRate $contentRate): static
+    {
+        if ($this->contentRates->removeElement($contentRate)) {
+            // set the owning side to null (unless already changed)
+            if ($contentRate->getCreatedBy() === $this) {
+                $contentRate->setCreatedBy(null);
+            }
+        }
+
+        return $this;
     }
 }

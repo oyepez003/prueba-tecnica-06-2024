@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\ContentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Serializer\Annotation as Serializer;
 
 #[ORM\Entity(repositoryClass: ContentRepository::class)]
 class Content
@@ -13,40 +16,60 @@ class Content
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serializer\Groups('dto')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID)]
+    #[Serializer\Groups('dto')]
     private ?string $uuid = null;
 
     #[ORM\Column(length: 255)]
     #[Constraints\NotBlank]
+    #[Serializer\Groups('dto')]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
     #[Constraints\NotBlank]
+    #[Serializer\Groups('dto')]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Constraints\NotBlank]
     #[Constraints\Url]
+    #[Serializer\Groups('dto')]
     private ?string $image = null;
 
     #[ORM\Column(length: 12)]
     #[Constraints\NotBlank]
     #[Constraints\Locale]
+    #[Serializer\Groups('dto')]
     private ?string $locale = null;
 
     #[ORM\Column]
     #[Constraints\NotBlank]
+    #[Serializer\Groups('dto')]
     private ?float $price = null;
 
     #[ORM\Column(nullable: true)]
+    #[Serializer\Groups('dto')]
     private ?float $saving = null;
 
     #[ORM\Column(length: 16)]
     #[Constraints\NotBlank]
     #[Constraints\Currency]
+    #[Serializer\Groups('dto')]
     private ?string $currency = null;
+
+    /**
+     * @var Collection<int, ContentRate>
+     */
+    #[ORM\OneToMany(targetEntity: ContentRate::class, mappedBy: 'content')]
+    private Collection $contentRates;
+
+    public function __construct()
+    {
+        $this->contentRates = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -156,5 +179,35 @@ class Content
         $this->setPrice($content->getPrice());
         $this->setSaving($content->getSaving());
         $this->setCurrency($content->getCurrency());
+    }
+
+    /**
+     * @return Collection<int, ContentRate>
+     */
+    public function getContentRates(): Collection
+    {
+        return $this->contentRates;
+    }
+
+    public function addContentRate(ContentRate $contentRate): static
+    {
+        if (!$this->contentRates->contains($contentRate)) {
+            $this->contentRates->add($contentRate);
+            $contentRate->setContent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContentRate(ContentRate $contentRate): static
+    {
+        if ($this->contentRates->removeElement($contentRate)) {
+            // set the owning side to null (unless already changed)
+            if ($contentRate->getContent() === $this) {
+                $contentRate->setContent(null);
+            }
+        }
+
+        return $this;
     }
 }

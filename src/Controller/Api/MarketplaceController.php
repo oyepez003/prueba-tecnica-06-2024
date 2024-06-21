@@ -2,16 +2,18 @@
 
 namespace App\Controller\Api;
 
-use App\Service\UserService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Content;
+use App\Entity\ContentRate;
+use App\Service\ContentService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api/content')]
-final class MarketplaceController extends AbstractController
+final class MarketplaceController extends BaseController
 {
-    public function __construct(private UserService $userService)
+    public function __construct(private ContentService $contentService)
     {
     }
 
@@ -20,9 +22,14 @@ final class MarketplaceController extends AbstractController
         name: 'app_marketplace_rate', 
         methods:[Request::METHOD_POST]
     )]
-    public function rate(): JsonResponse
+    public function rate(
+        Content $content,
+        #[MapRequestPayload(validationGroups: 'rate')] ContentRate $contentRateDto
+    ): JsonResponse
     {
-        return $this->json([]);
+        $contentRate = $this->contentService->rate($this->getUser(), $content, $contentRateDto);
+
+        return $this->json($contentRate);
     }
 
     #[Route(

@@ -3,14 +3,19 @@
 namespace App\Service;
 
 use App\Entity\Content;
+use App\Entity\ContentRate;
+use App\Entity\User;
 use App\Helper\Paginator;
+use App\Repository\ContentRateRepository;
 use App\Repository\ContentRepository;
+use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 
 class ContentService extends BaseService
 {
     public function __construct(
         private ContentRepository $contentRepository,
+        private ContentRateRepository $contentRateRepository,
     )
     {
     }
@@ -40,5 +45,15 @@ class ContentService extends BaseService
         $pagination = $this->contentRepository->paginate($page, $limit, $options, $filters);
 
         return Paginator::toArray($pagination);
+    }
+
+    public function rate(User $user, Content $content, ContentRate $contentRateDto): ContentRate {
+        $contentRateDto->setCreatedBy($user);
+        $contentRateDto->setContent($content);
+        $contentRateDto->setCreatedAt(new DateTimeImmutable());
+
+        $this->contentRateRepository->persist($contentRateDto);
+
+        return $contentRateDto;
     }
 }
